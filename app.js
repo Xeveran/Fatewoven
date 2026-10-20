@@ -387,6 +387,16 @@
       document.querySelectorAll('.tab-panel').forEach((panel) => panel.classList.toggle('is-visible', panel.id === `panel-${button.dataset.tab}`));
       if (button.dataset.tab === 'inventory') renderInventory();
       if (button.dataset.tab === 'guide') renderGuide();
+
+      // If this tab is shorter than the previous tab, clamp the old scroll
+      // position to the new document height so the viewport cannot sit in empty
+      // space beyond the footer. Do not otherwise change the user's scroll spot.
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        const maxScrollY = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+        if (window.scrollY > maxScrollY) {
+          window.scrollTo({ top: maxScrollY, behavior: 'auto' });
+        }
+      }));
     }));
   }
 
