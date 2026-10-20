@@ -153,7 +153,7 @@ h1 span { color: var(--gold); }
 .plan-panel { margin-top: 18px; padding: 22px; }
 .plan-heading { align-items: center; }
 .plan-heading .panel-description { margin-bottom: 0; max-width: 650px; }
-.plan-actions { display: flex; align-items: center; gap: 8px; }
+.plan-actions { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 8px; }
 .secondary-button, .primary-button { border: 1px solid #4b5665; background: #1b2532; padding: 10px 13px; font-size: 15px; font-weight: 800; letter-spacing: .03em; color: #c8d0d8; white-space: nowrap; }
 .secondary-button:hover { border-color: #95805b; color: var(--gold-bright); }
 .secondary-button[aria-pressed="true"] { border-color: var(--gold-muted); color: var(--gold-bright); background: rgba(180,147,77,.12); }
@@ -541,4 +541,17 @@ h1 span { color: var(--gold); }
 .site-footer {
   margin-top: 0;
   margin-bottom: 0;
+}
+
+/* Apply the current recommendation to stock only after the browser confirmation. */
+.allocation-apply-button { border-color: #e6cb87; }
+.allocation-apply-button span { padding-right: 5px; }
+.allocation-apply-button:disabled {
+  opacity: .45;
+  filter: saturate(.45);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+.allocation-apply-button:disabled:hover {
+  background: linear-gradient(180deg, #e7d19c, #c6a968);
 }
