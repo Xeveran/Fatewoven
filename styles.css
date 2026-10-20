@@ -525,3 +525,19 @@ h1 span { color: var(--gold); }
     margin-top: 11px;
   }
 }
+
+/* Sticky-footer layout: keep the footer at the bottom of the viewport when the
+   active tab has less content than the available screen height. Longer tabs
+   continue to grow naturally and scroll as usual. */
+.site-shell {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+.site-shell > main {
+  flex: 1 0 auto;
+}
+.site-footer {
+  margin-top: auto;
+}
