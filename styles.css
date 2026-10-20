@@ -783,14 +783,14 @@ h1 span { color: var(--gold); }
   .allocation-modal-actions button { flex: 1; padding: 10px 8px; font-size: 12px; }
 }
 
-/* Gift Plan page-height fix
-   The live stylesheet makes the inventory list a flexible child with
-   max-height:none. Because that child contains many rows, it can contribute
-   its full content height to the auto-sized CSS grid and leave excess page
-   height beyond the footer. Size containment prevents that intrinsic-size
-   contribution while flex-grow still lets the list fill the panel. */
+/* Fatewoven Gift Plan blank-space fix
+   The Gift Plan inventory is a flex child inside an auto-sized CSS grid row.
+   Without size containment, its 103 item rows can contribute their full
+   intrinsic height to the grid, even though the intended behavior is to scroll
+   within the inventory panel. Keep it flexible while removing that intrinsic
+   height contribution. */
 @media (min-width: 1081px) {
-  .workspace-grid > .inventory-panel > .inventory-list {
+  #panel-planner .workspace-grid > #inventoryPanel > #inventoryList {
     contain: size;
     height: 0;
     min-height: 0;
@@ -800,3 +800,4 @@ h1 span { color: var(--gold); }
     overflow-y: auto;
   }
 }
+
