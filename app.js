@@ -328,6 +328,11 @@
     unassignedToggle.textContent = hideUnassignedRows ? 'Show all rows' : 'Hide unassigned';
     unassignedToggle.setAttribute('aria-pressed', String(hideUnassignedRows));
     unassignedToggle.title = hideUnassignedRows ? 'Show all characters, including those without an assigned gift' : 'Hide rows where no gift is assigned';
+    const applyButton = document.getElementById('applyAllocation');
+    applyButton.disabled = assigned.length === 0;
+    applyButton.title = assigned.length
+      ? `Confirm and deduct the ${assigned.length} gifts currently allocated in this plan`
+      : 'No assigned gifts to deduct';
     const emptyState = document.getElementById('emptyPlan');
     const noInventory = countTotalInventory() === 0;
     const noTargets = allocations.length === 0;
@@ -511,6 +516,58 @@
     document.getElementById('toggleUnassigned').addEventListener('click', () => {
       hideUnassignedRows = !hideUnassignedRows;
       renderPlan();
+    });
+
+    document.getElementById('applyAllocation').addEventListener('click', () => {
+      // Rebuild at click time so the confirmation and deductions reflect the
+      // latest inventory and character order, regardless of the visible filter.
+      const { allocations } = buildPlan();
+      const assigned = allocations.filter((row) => row.gift);
+      if (!assigned.length) {
+        toast('There are no allocated gifts to deduct.');
+        renderAll();
+        return;
+      }
+
+      const deductions = {};
+      assigned.forEach((row) => {
+        deductions[row.gift] = (deductions[row.gift] || 0) + 1;
+      });
+
+      // Defensive check: don't mutate inventory if an allocation somehow exceeds stock.
+      const invalid = Object.entries(deductions).find(([item, quantity]) => (state.inventory[item] || 0) < quantity);
+      if (invalid) {
+        toast(`Inventory changed for ${invalid[0]}. Rebuild the plan before applying it.`);
+        renderAll();
+        return;
+      }
+
+      const lovedCount = assigned.filter((row) => row.tier === 'Loved').length;
+      const reallyLikedCount = assigned.filter((row) => row.tier === 'Really liked').length;
+      const itemLines = Object.entries(deductions)
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([item, quantity]) => `• ${item} × ${quantity}`)
+        .join('\n');
+      const message = [
+        `Deduct ${assigned.length} allocated ${assigned.length === 1 ? 'gift' : 'gifts'} from your inventory?`,
+        '',
+        `${lovedCount} Loved · ${reallyLikedCount} Really liked`,
+        'This applies every assigned row in the plan, even if “Hide unassigned” is enabled, and saves the new inventory counts in this browser.',
+        '',
+        'Items to deduct:',
+        itemLines,
+        '',
+        'Continue?'
+      ].join('\n');
+
+      if (!window.confirm(message)) return;
+
+      Object.entries(deductions).forEach(([item, quantity]) => {
+        state.inventory[item] = Math.max(0, (state.inventory[item] || 0) - quantity);
+      });
+      saveState();
+      renderAll();
+      toast(`Inventory updated: ${assigned.length} ${assigned.length === 1 ? 'gift deducted' : 'gifts deducted'}.`);
     });
   }
 
