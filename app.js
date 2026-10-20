@@ -382,22 +382,35 @@
   }
 
   function setupTabs() {
-    document.querySelectorAll('[data-tab]').forEach((button) => button.addEventListener('click', () => {
-      document.querySelectorAll('[data-tab]').forEach((tab) => tab.classList.toggle('is-active', tab === button));
-      document.querySelectorAll('.tab-panel').forEach((panel) => panel.classList.toggle('is-visible', panel.id === `panel-${button.dataset.tab}`));
-      if (button.dataset.tab === 'inventory') renderInventory();
-      if (button.dataset.tab === 'guide') renderGuide();
-
-      // If this tab is shorter than the previous tab, clamp the old scroll
-      // position to the new document height so the viewport cannot sit in empty
-      // space beyond the footer. Do not otherwise change the user's scroll spot.
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        const maxScrollY = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-        if (window.scrollY > maxScrollY) {
-          window.scrollTo({ top: maxScrollY, behavior: 'auto' });
-        }
-      }));
-    }));
+    document.querySelectorAll('[data-tab]').forEach((button) => {
+      button.addEventListener('click', () => {
+        document.querySelectorAll('[data-tab]').forEach((tab) => {
+          tab.classList.toggle('is-active', tab === button);
+        });
+        document.querySelectorAll('.tab-panel').forEach((panel) => {
+          panel.classList.toggle('is-visible', panel.id === `panel-${button.dataset.tab}`);
+        });
+  
+        if (button.dataset.tab === 'inventory') renderInventory();
+        if (button.dataset.tab === 'guide') renderGuide();
+  
+        // The Gift Plan is shorter than the inventory/reference tabs. Clamp any
+        // scroll position left over from those longer panels, after CSS/layout
+        // updates have completed. This prevents landing in empty space below the
+        // footer when switching to Gift Plan.
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            const maxScrollY = Math.max(
+              0,
+              document.documentElement.scrollHeight - window.innerHeight
+            );
+            if (window.scrollY > maxScrollY) {
+              window.scrollTo({ top: maxScrollY, behavior: 'auto' });
+            }
+          });
+        });
+      });
+    });
   }
 
   function setupRoster() {
