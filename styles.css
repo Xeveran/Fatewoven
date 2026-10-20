@@ -507,39 +507,37 @@ h1 span { color: var(--gold); }
    visible; scrolling happens inside the list when there are more rows than fit.
    Use nested CSS grids to prevent flex height-inflation bugs. */
 @media (min-width: 1081px) {
-  .workspace-grid {
-    align-items: stretch;
-  }
-
   .roster-panel {
-    display: grid;
-    grid-template-rows: auto auto auto minmax(0, 1fr) auto;
-    height: 100%;
+    display: flex;
+    flex-direction: column;
+    max-height: 680px;
     min-height: 0;
   }
 
   .roster-panel > .roster-list {
+    flex: 1 1 0;
     min-height: 0;
     max-height: none;
     overflow-y: auto;
   }
 
   .inventory-panel {
-    display: grid;
-    grid-template-rows: auto auto auto minmax(0, 1fr) auto;
-    height: 100%;
+    display: flex;
+    flex-direction: column;
+    max-height: 680px; /* Caps the total panel height so it never blows out the page */
     min-height: 0;
   }
 
   .inventory-panel > .inventory-list {
+    flex: 1 1 0;       /* Fills the remaining panel space and activates internal scrolling */
     min-height: 0;
-    max-height: none; /* Grid row minmax(0, 1fr) strictly bounds the height */
+    max-height: none;
     overflow-x: hidden;
     overflow-y: auto;
   }
 
   .inventory-panel > .inventory-footer {
-    grid-row: 5;
+    flex: 0 0 auto;
     margin-top: 11px;
   }
 }
