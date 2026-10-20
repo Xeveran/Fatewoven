@@ -46,6 +46,7 @@
   let plannedCounts = {};
   let draggingName = null;
   let toastTimeout = null;
+  let hideUnassignedRows = false;
 
   function loadState() {
     try {
@@ -314,12 +315,19 @@
       <div class="summary-chip good"><span>Loved gifts assigned</span><strong>${loved.length}</strong></div>
       <div class="summary-chip liked"><span>Really liked assigned</span><strong>${reallyLiked.length}</strong></div>
       <div class="summary-chip"><span>Gifts left over</span><strong>${unused}</strong></div>`;
-    document.getElementById('planRows').innerHTML = allocations.map((row) => {
+    const visibleAllocations = hideUnassignedRows ? allocations.filter((row) => row.gift) : allocations;
+    document.getElementById('planRows').innerHTML = visibleAllocations.map((row) => {
       const note = row.gift ? row.reason : 'No suitable gift available in your inventory.';
       const gift = row.gift ? `<span class="gift-icon">✦</span><span class="gift-name">${escapeHTML(row.gift)}</span>` : '<span class="no-gift">No gift assigned</span>';
       const tier = row.tier === 'Loved' ? '<span class="tier-badge">✦ Loved</span>' : row.tier === 'Really liked' ? '<span class="tier-badge really">✧ Really liked</span>' : '<span class="empty-tier">—</span>';
       return `<tr><td class="priority-cell">${String(row.priority).padStart(2, '0')}</td><td><span class="plan-character">${escapeHTML(row.character.name)}</span></td><td>${gift}</td><td>${tier}</td><td class="note-cell">${escapeHTML(note)}</td></tr>`;
-    }).join('');
+    }).join('') || (hideUnassignedRows && allocations.length
+      ? '<tr class="filtered-empty-row"><td colspan="5">No assigned gifts to show. Use “Show all rows” to reveal unassigned characters.</td></tr>'
+      : '');
+    const unassignedToggle = document.getElementById('toggleUnassigned');
+    unassignedToggle.textContent = hideUnassignedRows ? 'Show all rows' : 'Hide unassigned';
+    unassignedToggle.setAttribute('aria-pressed', String(hideUnassignedRows));
+    unassignedToggle.title = hideUnassignedRows ? 'Show all characters, including those without an assigned gift' : 'Hide rows where no gift is assigned';
     const emptyState = document.getElementById('emptyPlan');
     const noInventory = countTotalInventory() === 0;
     const noTargets = allocations.length === 0;
@@ -499,6 +507,13 @@
     return lines.join('\n');
   }
 
+  function setupPlanControls() {
+    document.getElementById('toggleUnassigned').addEventListener('click', () => {
+      hideUnassignedRows = !hideUnassignedRows;
+      renderPlan();
+    });
+  }
+
   function setupExports() {
     document.getElementById('copyPlan').addEventListener('click', async () => {
       const text = planAsText();
@@ -573,6 +588,7 @@
   setupTabs();
   setupRoster();
   setupInventory();
+  setupPlanControls();
   setupExports();
   renderAll();
   renderGuide();
