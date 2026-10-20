@@ -499,3 +499,27 @@ h1 span { color: var(--gold); }
 .priority-stepper button[data-move-direction="1"]::before {
   clip-path: polygon(32% 0, 68% 0, 68% 62%, 100% 62%, 50% 100%, 0 62%, 32% 62%);
 }
+
+/* Desktop layout: let the inventory rows occupy the panel's available height.
+   The list becomes the flexible middle region, while its header and footer stay
+   visible; scrolling happens inside the list when there are more rows than fit. */
+@media (min-width: 1081px) {
+  .inventory-panel {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .inventory-panel > .inventory-list {
+    flex: 1 1 0;
+    min-height: 0;
+    max-height: none;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .inventory-panel > .inventory-footer {
+    flex: 0 0 auto;
+    margin-top: 11px;
+  }
+}
