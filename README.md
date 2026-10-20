@@ -1,27 +1,16 @@
 # Fatewoven Gift Strategist
 
-A fan-made, single-page gift planning app for **Fire Emblem: Fortune's Weave**. It runs entirely in your browser and can be hosted as a static site on GitHub Pages—no build tools, backend, API key, or third-party JavaScript required.
+A fan-made, single-page gift planning app for **Fire Emblem: Fortune's Weave**. It runs entirely in the browser with no build tools, backend, API key, or third-party JavaScript required.
 
-## Use it
+## How to use
 
-1. Open `index.html` in a modern browser, or publish the files on GitHub Pages.
-2. In **Inventory**, enter how many of each gift you currently own. Counts accept whole numbers from 0 to 999.
-3. In **Gift Plan**, drag characters into your preferred priority order. The first row is the highest priority. Uncheck anyone you do not want to plan for this week.
-4. Use the four **Route priority presets** to sort the character list by the route's Renown requirement from lowest to highest, or drag/reorder the list manually. Automatic recruits sort first; characters without a route requirement listed in the reference sort last.
-5. Review the **Weekly gift itinerary**. Use **Copy plan** or **Export CSV** to take the recommendation into the game.
-6. Use **Export backup** to save your character order, selected characters, active route preset, and inventory as a JSON file. Use **Import backup** to restore it in this or another browser.
+1. In **Inventory**, enter how many of each gift you currently own. Counts accept whole numbers from 0 to 999.
+2. In **Gift Plan**, drag characters into your preferred priority order. The first row is the highest priority. Uncheck anyone you do not want to plan for this week.
+3. Use the four **Route priority presets** to sort the character list by the route's Renown requirement from lowest to highest, or drag/reorder the list manually. Automatic recruits sort first; characters without a route requirement listed in the reference sort last.
+4. Review the **Weekly gift itinerary**. Use **Copy plan** or **Export CSV** to take the recommendation into the game.
+5. Use **Export backup** to save your character order, selected characters, active route preset, and inventory as a JSON file. Use **Import backup** to restore it in this or another browser.
 
 Your state is saved in `localStorage` in the current browser. It does not automatically sync across browsers or devices. Export a backup before clearing browser data.
-
-## Publish to GitHub Pages
-
-1. Create a GitHub repository, for example `fortune-weave-gift-planner`.
-2. Upload `index.html`, `styles.css`, `data.js`, `app.js`, and this `README.md` to the repository root.
-3. Open **Settings → Pages** in the repository.
-4. Under **Build and deployment**, select **Deploy from a branch**, choose the `main` branch and `/(root)`, and save.
-5. Wait for GitHub Pages to publish the site, then open the URL displayed in the Pages settings.
-
-There is no package installation or compilation step. All paths are relative, so the same files also work in a project Pages site.
 
 ## How the optimizer works
 
