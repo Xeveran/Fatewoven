@@ -156,6 +156,7 @@ h1 span { color: var(--gold); }
 .plan-actions { display: flex; align-items: center; gap: 8px; }
 .secondary-button, .primary-button { border: 1px solid #4b5665; background: #1b2532; padding: 10px 13px; font-size: 15px; font-weight: 800; letter-spacing: .03em; color: #c8d0d8; white-space: nowrap; }
 .secondary-button:hover { border-color: #95805b; color: var(--gold-bright); }
+.secondary-button[aria-pressed="true"] { border-color: var(--gold-muted); color: var(--gold-bright); background: rgba(180,147,77,.12); }
 .primary-button { color: #181c22; background: linear-gradient(180deg, #e7d19c, #c6a968); border-color: #e6cb87; box-shadow: inset 0 1px rgba(255,255,255,.45); }
 .primary-button:hover { background: linear-gradient(180deg, #f1dfa9, #d5b978); }
 .primary-button span { font-size: 21px; padding-right: 4px; }
@@ -171,6 +172,7 @@ h1 span { color: var(--gold); }
 .plan-table th { padding: 10px 11px; color: #8692a3; border-bottom: 1px solid #3b4757; font-size: 13.5px; letter-spacing: .1em; text-transform: uppercase; font-weight: 800; }
 .plan-table td { padding: 12px 11px; border-bottom: 1px solid rgba(53,65,82,.55); color: #b7c0cb; font-size: 16.5px; vertical-align: middle; }
 .plan-table tbody tr:last-child td { border-bottom: 0; }
+.filtered-empty-row td { padding: 28px 18px; text-align: center; color: #8793a3; font-style: italic; }
 .plan-table tbody tr:hover { background: rgba(255,255,255,.025); }
 .priority-col { width: 44px; }
 .priority-cell { color: #778596 !important; font: 19.5px Georgia, serif !important; }
