@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101620">
+  <meta name="description" content="Plan gift allocations in Fire Emblem: Fortune's Weave with inventory tracking and character priority ordering.">
+  <title>Fatewoven Gift Strategist</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="site-shell">
+    <header class="masthead">
+      <div class="masthead-inner">
+        <div class="brand-lockup">
+          <div class="crest" aria-hidden="true">
+            <svg viewBox="0 0 64 72" role="img">
+              <path d="M32 3 56 15 53 48 32 67 11 48 8 15Z" fill="#8f303e" stroke="#d9b978" stroke-width="2.2"/>
+              <path d="M32 11 47 19 45 43 32 56 19 43 17 19Z" fill="#131d2b" stroke="#d9b978" stroke-width="1.4"/>
+              <path d="M32 15 35 28 46 30 37 37 40 49 32 42 24 49 27 37 18 30 29 28Z" fill="#ead8a7"/>
+              <path d="M8 15 2 26 10 25M56 15 62 26 54 25" fill="none" stroke="#d9b978" stroke-width="2"/>
+            </svg>
+          </div>
+          <div>
+            <p class="eyebrow">A field ledger for the four paths</p>
+            <h1>Fatewoven <span>Gift Strategist</span></h1>
+          </div>
+        </div>
+        <div class="masthead-mark" aria-label="Fortune's Weave inspired styling">
+          <span class="mark-line"></span><span class="mark-diamond">✦</span><span class="mark-line"></span>
+        </div>
+      </div>
+      <div class="banner-rule"><span></span><i></i><span></span></div>
+    </header>
+
+    <main>
+      <section class="intro-row">
+        <div class="intro-copy">
+          <p class="section-kicker">Support planning · Part I</p>
+          <h2>Spend each gift where it matters most.</h2>
+          <p class="intro-text">Set your inventory, arrange characters by importance, and build a gift plan that saves enough useful items to gift as many people as possible. Among plans of that size, higher-priority characters get first claim on <strong>Loved</strong> gifts.</p>
+          <p class="data-caveat">Offline snapshot · 48 character preference records · 100 named inventory items · review the data note before relying on uncertain entries.</p>
+        </div>
+        <div class="intro-seal" aria-hidden="true">
+          <div class="seal-orbit">✦</div><div class="seal-center">FW</div><div class="seal-caption">Threads of<br>fortune</div>
+        </div>
+      </section>
+
+      <section class="stat-strip" aria-label="Planner summary">
+        <div class="stat"><span class="stat-label">Gifts in inventory</span><strong id="statInventory">0</strong><small>Across all item types</small></div>
+        <div class="stat"><span class="stat-label">Characters in plan</span><strong id="statTargets">0</strong><small>Enabled with preference data</small></div>
+        <div class="stat"><span class="stat-label">Planned gifts</span><strong id="statPlanned">0</strong><small>One gift per character</small></div>
+        <div class="stat stat-accent"><span class="stat-label">Loved gifts assigned</span><strong id="statLoved">0</strong><small>Highest support reaction</small></div>
+      </section>
+
+      <nav class="tab-bar" aria-label="Planner sections">
+        <button class="tab-button is-active" data-tab="planner" type="button"><span>01</span> Gift Plan</button>
+        <button class="tab-button" data-tab="inventory" type="button"><span>02</span> Inventory</button>
+        <button class="tab-button" data-tab="guide" type="button"><span>03</span> Gift Reference</button>
+        <div class="tab-spacer"></div>
+        <button id="exportBackup" class="quiet-action" type="button">Export backup</button>
+        <button id="importBackup" class="quiet-action" type="button">Import backup</button>
+        <input id="backupFile" type="file" accept="application/json,.json" hidden>
+      </nav>
+
+      <section class="tab-panel is-visible" id="panel-planner" aria-labelledby="plannerTitle">
+        <div class="workspace-grid">
+          <section class="panel roster-panel">
+            <div class="panel-heading">
+              <div>
+                <p class="section-kicker">Your order is the priority</p>
+                <h2 id="plannerTitle">Character priority</h2>
+              </div>
+              <span id="rosterCount" class="count-pill">0 characters</span>
+            </div>
+            <p class="panel-description">Drag the grip to reorder characters. The first character is the highest priority. Disable anyone you do not plan to gift this week.</p>
+            <div class="roster-tools">
+              <label class="search-field"><span class="sr-only">Search characters</span><span class="search-icon">⌕</span><input id="characterSearch" type="search" placeholder="Find a character…" autocomplete="off"></label>
+              <div class="inline-actions">
+                <button class="text-action" id="selectAllCharacters" type="button">Select all</button>
+                <span class="action-divider">·</span>
+                <button class="text-action" id="selectNoCharacters" type="button">Select none</button>
+                <span class="action-divider">·</span>
+                <button class="text-action" id="resetOrder" type="button">A–Z</button>
+              </div>
+            </div>
+            <div class="roster-header-row"><span>Priority / character</span><span>Gift matches</span><span class="sr-only">Enabled</span></div>
+            <ol id="rosterList" class="roster-list" aria-label="Drag to sort character priority"></ol>
+            <div id="noCharacterResults" class="empty-state compact" hidden>No characters match that search.</div>
+            <div class="legend-row"><span class="legend-dot love-dot"></span> Loved <span class="legend-dot like-dot"></span> Really liked <span class="legend-dot none-dot"></span> No preferences in snapshot</div>
+          </section>
+
+          <section class="panel inventory-panel" id="inventoryPanel">
+            <div class="panel-heading">
+              <div>
+                <p class="section-kicker">What you have on hand</p>
+                <h2>Gift inventory</h2>
+              </div>
+              <span id="inventoryItemCount" class="count-pill">0 item types</span>
+            </div>
+            <p class="panel-description">Enter how many of each gift you own. Counts are saved in this browser automatically.</p>
+            <div class="inventory-toolbar">
+              <label class="search-field"><span class="sr-only">Search gift items</span><span class="search-icon">⌕</span><input id="itemSearch" type="search" placeholder="Find a gift item…" autocomplete="off"></label>
+              <label class="select-wrap"><span class="sr-only">Filter inventory</span><select id="inventoryFilter"><option value="all">All items</option><option value="stocked">In stock</option><option value="planned">Used in plan</option></select></label>
+            </div>
+            <div class="inventory-subhead"><span>Gift item</span><span>Owned</span></div>
+            <div id="inventoryList" class="inventory-list" aria-label="Gift item quantities"></div>
+            <div id="noItemResults" class="empty-state compact" hidden>No gift items match those filters.</div>
+            <div class="inventory-footer"><span><span class="mini-spark">✦</span> <strong id="inventoryFooterTotal">0</strong> total gifts available</span><button class="text-action danger-text" id="clearInventory" type="button">Clear counts</button></div>
+          </section>
+        </div>
+
+        <section class="panel plan-panel">
+          <div class="panel-heading plan-heading">
+            <div>
+              <p class="section-kicker">Recommended allocation</p>
+              <h2>Weekly gift itinerary</h2>
+              <p class="panel-description">Only Loved and Really liked preferences are assigned. This planner assumes one gift per character per week.</p>
+            </div>
+            <div class="plan-actions">
+              <button class="secondary-button" id="copyPlan" type="button">Copy plan</button>
+              <button class="primary-button" id="downloadCsv" type="button"><span>⇩</span> Export CSV</button>
+            </div>
+          </div>
+          <div class="plan-summary" id="planSummary"></div>
+          <div class="plan-table-wrap">
+            <table class="plan-table">
+              <thead><tr><th class="priority-col">#</th><th>Character</th><th>Recommended gift</th><th>Reaction</th><th>Allocation note</th></tr></thead>
+              <tbody id="planRows"></tbody>
+            </table>
+          </div>
+          <div id="emptyPlan" class="empty-state" hidden><div class="empty-emblem">✦</div><h3>Your ledger is waiting</h3><p>Add inventory counts to see which gifts can raise support this week.</p></div>
+          <div class="plan-footnote"><span class="legend-dot love-dot"></span><span><strong>Loved</strong> is treated as the top reaction.</span><span class="footnote-sep">/</span><span class="legend-dot like-dot"></span><span><strong>Really liked</strong> is the next-best documented reaction.</span></div>
+        </section>
+      </section>
+
+      <section class="tab-panel" id="panel-inventory" aria-labelledby="inventoryTitle">
+        <div class="panel full-panel">
+          <div class="panel-heading"><div><p class="section-kicker">Every unique gift name</p><h2 id="inventoryTitle">Inventory ledger</h2></div><span class="count-pill" id="inventoryItemCountLarge">0 item types</span></div>
+          <p class="panel-description">The list includes distinct named gifts from the preference snapshot plus a few inventory-only names from supplemental guides. Items with no preference entry can be tracked, but will not be assigned by the optimizer. Use the search/filter controls here, then return to Gift Plan to see the allocation.</p>
+          <div class="inventory-toolbar large-toolbar">
+            <label class="search-field"><span class="sr-only">Search gift items</span><span class="search-icon">⌕</span><input id="itemSearchLarge" type="search" placeholder="Search all gift items…" autocomplete="off"></label>
+            <label class="select-wrap"><span class="sr-only">Filter inventory</span><select id="inventoryFilterLarge"><option value="all">All items</option><option value="stocked">In stock</option><option value="planned">Used in plan</option></select></label>
+          </div>
+          <div id="inventoryListLarge" class="inventory-list large-inventory-list"></div>
+          <div class="inventory-footer"><span><span class="mini-spark">✦</span> <strong id="inventoryFooterTotalLarge">0</strong> total gifts available</span><button class="text-action danger-text" id="clearInventoryLarge" type="button">Clear counts</button></div>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="panel-guide" aria-labelledby="guideTitle">
+        <div class="panel full-panel">
+          <div class="panel-heading"><div><p class="section-kicker">Quick reference</p><h2 id="guideTitle">Character gift preferences</h2></div><span class="count-pill" id="guideCharacterCount">0 characters</span></div>
+          <p class="panel-description">Search a character to inspect the Loved and Really liked items recorded in this bundled dataset. A blank tier means no preference in the snapshot, not necessarily that the character dislikes every gift.</p>
+          <label class="search-field guide-search"><span class="sr-only">Search the gift reference</span><span class="search-icon">⌕</span><input id="guideSearch" type="search" placeholder="Search character or gift…" autocomplete="off"></label>
+          <div id="guideList" class="guide-grid"></div>
+          <p class="source-note"><strong>Data note:</strong> the Game8 page did not permit direct retrieval during app creation. This offline snapshot combines the public Game8-derived gift export with a small number of clearly marked supplemental reports. The current bundle includes 48 character preference records and 100 named inventory items; it is not yet a verified full 104-item catalogue. Preferences can change as guides are corrected; check the source guide before treating uncertain entries as definitive.</p>
+          <p class="source-links"><a href="https://game8.co/games/Fire-Emblem-Fortunes-Weave/archives/623690" target="_blank" rel="noopener noreferrer">Open Game8 gift guide ↗</a><a href="https://fire-emblem-fortunes-weave.turam.dev/" target="_blank" rel="noopener noreferrer">Game8-derived character index ↗</a><a href="https://raiderking.com/fire-emblem-fortunes-weave-all-loved-gifts-guide/" target="_blank" rel="noopener noreferrer">Supplemental gift guide ↗</a></p>
+        </div>
+      </section>
+
+      <section class="closing-note">
+        <div class="closing-ornament">✦</div>
+        <p>Each gift is a thread. Your priority order decides where the weave begins.</p>
+        <span>FATEWOVEN GIFT STRATEGIST · A FAN-MADE COMPANION</span>
+      </section>
+    </main>
+    <footer class="site-footer"><span>Fan-made tool · Not affiliated with Nintendo or Intelligent Systems</span><span>Settings and inventory stay in this browser unless you export a backup.</span></footer>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
