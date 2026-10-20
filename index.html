@@ -133,7 +133,8 @@
             <div class="plan-actions">
               <button class="secondary-button" id="toggleUnassigned" type="button" aria-pressed="false" title="Hide rows where no gift is assigned">Hide unassigned</button>
               <button class="secondary-button" id="copyPlan" type="button">Copy plan</button>
-              <button class="primary-button" id="downloadCsv" type="button"><span>⇩</span> Export CSV</button>
+              <button class="secondary-button" id="downloadCsv" type="button"><span aria-hidden="true">⇩</span> Export CSV</button>
+              <button class="primary-button allocation-apply-button" id="applyAllocation" type="button" disabled title="No assigned gifts to deduct"><span aria-hidden="true">✓</span> Apply &amp; deduct</button>
             </div>
           </div>
           <div class="plan-summary" id="planSummary"></div>
