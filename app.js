@@ -273,8 +273,15 @@
   function renderInventoryList(listId, searchId, filterId, emptyId) {
     const list = document.getElementById(listId);
     const items = filterItems(document.getElementById(searchId).value, document.getElementById(filterId).value);
+    const hasMatches = items.length > 0;
+
     list.innerHTML = items.map(inventoryRowHTML).join('');
-    if (emptyId) document.getElementById(emptyId).hidden = items.length > 0;
+    list.hidden = !hasMatches;
+
+    if (emptyId) {
+      const emptyMessage = document.getElementById(emptyId);
+      if (emptyMessage) emptyMessage.hidden = hasMatches;
+    }
   }
 
   function renderInventory() {
@@ -535,7 +542,7 @@
         setInventory(input.dataset.inventoryInput, input.value);
       });
     });
-    [['itemSearch', 'inventoryFilter', 'inventoryList', 'noItemResults'], ['itemSearchLarge', 'inventoryFilterLarge', 'inventoryListLarge', null]].forEach(([searchId, filterId, listId, emptyId]) => {
+    [['itemSearch', 'inventoryFilter', 'inventoryList', 'noItemResults'], ['itemSearchLarge', 'inventoryFilterLarge', 'inventoryListLarge', 'noItemResultsLarge']].forEach(([searchId, filterId, listId, emptyId]) => {
       document.getElementById(searchId).addEventListener('input', () => renderInventoryList(listId, searchId, filterId, emptyId));
       document.getElementById(filterId).addEventListener('change', () => renderInventoryList(listId, searchId, filterId, emptyId));
     });
