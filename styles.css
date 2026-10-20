@@ -178,8 +178,33 @@ h1 span { color: var(--gold); }
 .priority-cell { color: #778596 !important; font: 19.5px Georgia, serif !important; }
 .plan-character { color: #eee2c9; font: 600 21px Georgia, serif; }
 .gift-name { color: #e1dbcd; font: 600 18px Georgia, serif; }
-.gift-icon { position: relative; display: inline-grid; place-items: center; box-sizing: border-box; vertical-align: middle; line-height: 1; padding: 0; margin-right: 7px; width: 22px; height: 22px; border: 1px solid #776947; color: var(--gold-bright); font-size: 0; background: rgba(217,187,123,.07); }
-.gift-icon::before { content: "✦"; position: absolute; left: 50%; top: calc(50%); transform: translate(-50%, -50%); color: var(--gold-bright); font-size: 16px; line-height: 1; }
+.gift-icon {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  box-sizing: border-box;
+  vertical-align: middle;
+  line-height: 1;
+  padding: 0;
+  margin-right: 7px;
+  width: 22px;
+  height: 22px;
+  border: 1px solid #776947;
+  color: var(--gold-bright);
+  font-size: 0;
+  background: rgba(217,187,123,.07);
+}
+/* Center the star's visible glyph optically, not just its font box. */
+.gift-icon::before {
+  content: "✦";
+  position: absolute;
+  left: 50%;
+  top: calc(50% - 2px);
+  transform: translate(-50%, -50%);
+  color: var(--gold-bright);
+  font-size: 16px;
+  line-height: 1;
+}
 .tier-badge { display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(217,187,123,.37); padding: 4px 8px; color: #efd9a0; background: rgba(217,187,123,.08); font-size: 13.5px; white-space: nowrap; }
 .tier-badge.really { border-color: rgba(141,192,168,.35); background: rgba(141,192,168,.08); color: #b3ddc9; }
 .note-cell { color: #8593a5 !important; font-size: 15px !important; }
@@ -502,6 +527,7 @@ h1 span { color: var(--gold); }
   clip-path: polygon(32% 0, 68% 0, 68% 62%, 100% 62%, 50% 100%, 0 62%, 32% 62%);
 }
 
+
 /* Desktop layout: let the inventory rows occupy the panel's available height.
    The list becomes the flexible middle region, while its header and footer stay
    visible; scrolling happens inside the list when there are more rows than fit. */
@@ -513,8 +539,9 @@ h1 span { color: var(--gold); }
   }
 
   .inventory-panel > .inventory-list {
+    flex: 1 1 0;
     min-height: 0;
-    max-height: 510px; /* Constrains the 100+ items to a scrollable box on desktop */
+    max-height: none;
     overflow-x: hidden;
     overflow-y: auto;
   }
@@ -542,6 +569,7 @@ h1 span { color: var(--gold); }
   margin-bottom: 0;
 }
 
+
 /* Apply the current recommendation to stock only after the browser confirmation. */
 .allocation-apply-button { border-color: #e6cb87; }
 .allocation-apply-button span { padding-right: 5px; }
@@ -554,6 +582,7 @@ h1 span { color: var(--gold); }
 .allocation-apply-button:disabled:hover {
   background: linear-gradient(180deg, #e7d19c, #c6a968);
 }
+
 
 /* Themed confirmation dialog for applying a gift allocation. */
 .allocation-modal {
