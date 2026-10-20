@@ -504,23 +504,42 @@ h1 span { color: var(--gold); }
 
 /* Desktop layout: let the inventory rows occupy the panel's available height.
    The list becomes the flexible middle region, while its header and footer stay
-   visible; scrolling happens inside the list when there are more rows than fit. */
+   visible; scrolling happens inside the list when there are more rows than fit.
+   Use nested CSS grids to prevent flex height-inflation bugs. */
 @media (min-width: 1081px) {
+  .workspace-grid {
+    align-items: stretch;
+  }
+
+  .roster-panel {
+    display: grid;
+    grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+    height: 100%;
+    min-height: 0;
+  }
+
+  .roster-panel > .roster-list {
+    min-height: 0;
+    max-height: none;
+    overflow-y: auto;
+  }
+
   .inventory-panel {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+    height: 100%;
     min-height: 0;
   }
 
   .inventory-panel > .inventory-list {
     min-height: 0;
-    max-height: 510px; /* Constrains the 100+ items to a scrollable box on desktop */
+    max-height: none; /* Grid row minmax(0, 1fr) strictly bounds the height */
     overflow-x: hidden;
     overflow-y: auto;
   }
 
   .inventory-panel > .inventory-footer {
-    flex: 0 0 auto;
+    grid-row: 5;
     margin-top: 11px;
   }
 }
