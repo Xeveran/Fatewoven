@@ -279,7 +279,7 @@
 
   function renderInventory() {
     renderInventoryList('inventoryList', 'itemSearch', 'inventoryFilter', 'noItemResults');
-    renderInventoryList('inventoryListLarge', 'itemSearchLarge', 'inventoryFilterLarge', null);
+    renderInventoryList('inventoryListLarge', 'itemSearchLarge', 'inventoryFilterLarge', 'noItemResultsLarge');
   }
 
   function tierMarkup(items, tier) {
@@ -717,6 +717,58 @@
     });
   }
 
+  function setupViewPreferences() {
+    const preferenceKey = 'fatewoven-gift-strategist-view-preferences-v1';
+    const validFilters = ['all', 'stocked', 'planned'];
+    let preferences = {};
+
+    try {
+      const raw = localStorage.getItem(preferenceKey);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+          preferences = parsed;
+        }
+      }
+    } catch (error) {
+      console.warn('Could not load saved display preferences:', error);
+    }
+
+    const inventoryFilter = document.getElementById('inventoryFilter');
+    const inventoryFilterLarge = document.getElementById('inventoryFilterLarge');
+    const unassignedToggle = document.getElementById('toggleUnassigned');
+    const validFilter = (value) => validFilters.includes(value) ? value : 'all';
+
+    // Restore the two inventory dropdowns independently before the first render.
+    inventoryFilter.value = validFilter(preferences.inventoryFilter);
+    inventoryFilterLarge.value = validFilter(preferences.inventoryFilterLarge);
+
+    function savePreferences() {
+      try {
+        localStorage.setItem(preferenceKey, JSON.stringify({
+          inventoryFilter: inventoryFilter.value,
+          inventoryFilterLarge: inventoryFilterLarge.value,
+          hideUnassigned: unassignedToggle.getAttribute('aria-pressed') === 'true'
+        }));
+      } catch (error) {
+        // Display preferences are non-critical; the app should keep working if
+        // browser storage is disabled or full.
+        console.warn('Could not save display preferences:', error);
+      }
+    }
+
+    inventoryFilter.addEventListener('change', savePreferences);
+    inventoryFilterLarge.addEventListener('change', savePreferences);
+    unassignedToggle.addEventListener('click', savePreferences);
+
+    // The original click handler (registered by setupPlanControls first) updates
+    // the internal toggle state and table. Using it here keeps the display and
+    // internal state in sync after a refresh.
+    if (preferences.hideUnassigned === true) {
+      unassignedToggle.click();
+    }
+  }
+	
   function setupExports() {
     document.getElementById('copyPlan').addEventListener('click', async () => {
       const text = planAsText();
@@ -793,6 +845,7 @@
   setupRoster();
   setupInventory();
   setupPlanControls();
+  setupViewPreferences();
   setupExports();
   renderAll();
   renderGuide();
