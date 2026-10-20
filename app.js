@@ -381,6 +381,37 @@
     renderAll();
   }
 
+  function setupBackToTop() {
+    const button = document.getElementById('backToTop');
+    if (!button) return;
+  
+    const showAfterPixels = 400;
+    let currentlyVisible = false;
+  
+    const updateVisibility = () => {
+      const shouldShow = (window.scrollY || document.documentElement.scrollTop || 0) > showAfterPixels;
+      if (shouldShow === currentlyVisible) return;
+  
+      currentlyVisible = shouldShow;
+      button.classList.toggle('is-visible', shouldShow);
+      button.setAttribute('aria-hidden', String(!shouldShow));
+      button.tabIndex = shouldShow ? 0 : -1;
+  
+      // Don't leave keyboard focus on a button once it becomes hidden again.
+      if (!shouldShow && document.activeElement === button) button.blur();
+    };
+  
+    button.addEventListener('click', () => {
+      const reduceMotion = typeof window.matchMedia === 'function' &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+    });
+  
+    window.addEventListener('scroll', updateVisibility, { passive: true });
+    window.addEventListener('resize', updateVisibility, { passive: true });
+    updateVisibility();
+  }
+
   function setupTabs() {
     document.querySelectorAll('[data-tab]').forEach((button) => {
       button.addEventListener('click', () => {
@@ -757,6 +788,7 @@
   }
 
   document.getElementById('guideSearch').addEventListener('input', renderGuide);
+  setupBackToTop();
   setupTabs();
   setupRoster();
   setupInventory();
