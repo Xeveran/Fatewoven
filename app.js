@@ -229,7 +229,13 @@
         : '<span class="route-renown route-unlisted">· Not listed</span>';
       return `<li class="roster-item${enabled ? '' : ' roster-disabled'}" draggable="true" data-character="${escapeHTML(name)}">
         <button class="drag-grip" type="button" aria-label="Drag to reorder ${escapeHTML(name)}" title="Drag to reorder">⠿</button>
-        <div class="roster-person"><span class="priority-number">${String(originalPriority).padStart(2, '0')} <span class="character-name">${escapeHTML(name)}</span></span><span class="character-flair">${escapeHTML(summary)} ${routeInfo}<span class="priority-stepper"><button type="button" data-move-character="${escapeHTML(name)}" data-move-direction="-1" aria-label="Move ${escapeHTML(name)} up" title="Move up" ${originalPriority === 1 ? 'disabled' : ''}>↑</button><button type="button" data-move-character="${escapeHTML(name)}" data-move-direction="1" aria-label="Move ${escapeHTML(name)} down" title="Move down" ${originalPriority === state.order.length ? 'disabled' : ''}>↓</button></span></span></div>
+        <div class="roster-person">
+          <div class="roster-main">
+            <div class="roster-name-line"><span class="priority-number">${String(originalPriority).padStart(2, '0')}</span><span class="character-name">${escapeHTML(name)}</span></div>
+            <span class="character-flair">${escapeHTML(summary)} ${routeInfo}</span>
+          </div>
+          <span class="priority-stepper"><button type="button" data-move-character="${escapeHTML(name)}" data-move-direction="-1" aria-label="Move ${escapeHTML(name)} up" title="Move up" ${originalPriority === 1 ? 'disabled' : ''}>↑</button><button type="button" data-move-character="${escapeHTML(name)}" data-move-direction="1" aria-label="Move ${escapeHTML(name)} down" title="Move down" ${originalPriority === state.order.length ? 'disabled' : ''}>↓</button></span>
+        </div>
         <div class="match-count"><b>${matchCount}</b><br>available</div>
         <label class="toggle-cell"><span class="sr-only">Include ${escapeHTML(name)} in plan</span><input type="checkbox" data-toggle-character="${escapeHTML(name)}" ${enabled ? 'checked' : ''}></label>
       </li>`;
@@ -310,7 +316,7 @@
       <div class="summary-chip"><span>Gifts left over</span><strong>${unused}</strong></div>`;
     document.getElementById('planRows').innerHTML = allocations.map((row) => {
       const note = row.gift ? row.reason : 'No suitable gift available in your inventory.';
-      const gift = row.gift ? `<span class="gift-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12,2L15,9L22,12L15,15L12,22L9,15L2,12L9,9Z"/></svg></span><span class="gift-name">${escapeHTML(row.gift)}</span>` : '<span class="no-gift">No gift assigned</span>';
+      const gift = row.gift ? `<span class="gift-icon">✦</span><span class="gift-name">${escapeHTML(row.gift)}</span>` : '<span class="no-gift">No gift assigned</span>';
       const tier = row.tier === 'Loved' ? '<span class="tier-badge">✦ Loved</span>' : row.tier === 'Really liked' ? '<span class="tier-badge really">✧ Really liked</span>' : '<span class="empty-tier">—</span>';
       return `<tr><td class="priority-cell">${String(row.priority).padStart(2, '0')}</td><td><span class="plan-character">${escapeHTML(row.character.name)}</span></td><td>${gift}</td><td>${tier}</td><td class="note-cell">${escapeHTML(note)}</td></tr>`;
     }).join('');
