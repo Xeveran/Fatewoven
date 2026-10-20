@@ -791,7 +791,7 @@ h1 span { color: var(--gold); }
    height contribution. */
 @media (min-width: 1081px) {
   #panel-planner .workspace-grid > #inventoryPanel > #inventoryList {
-    contain: size;
+    /* contain: size; */
     height: 0;
     min-height: 0;
     max-height: none;
