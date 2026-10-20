@@ -783,11 +783,20 @@ h1 span { color: var(--gold); }
   .allocation-modal-actions button { flex: 1; padding: 10px 8px; font-size: 12px; }
 }
 
-/* Height fix when Gift Plan tab is selected */
+/* Gift Plan page-height fix
+   The live stylesheet makes the inventory list a flexible child with
+   max-height:none. Because that child contains many rows, it can contribute
+   its full content height to the auto-sized CSS grid and leave excess page
+   height beyond the footer. Size containment prevents that intrinsic-size
+   contribution while flex-grow still lets the list fill the panel. */
 @media (min-width: 1081px) {
-  /* The planner's single-column inventory should scroll inside its panel,
-     not expand to the full height of every inventory row. */
-  .inventory-panel > .inventory-list {
-    max-height: min(560px, 55vh);
+  .workspace-grid > .inventory-panel > .inventory-list {
+    contain: size;
+    height: 0;
+    min-height: 0;
+    max-height: none;
+    flex: 1 1 0;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 }
