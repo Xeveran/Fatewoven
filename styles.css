@@ -897,3 +897,12 @@ h1 span { color: var(--gold); }
 @media (prefers-reduced-motion: reduce) {
   .back-to-top { transition: none; }
 }
+
+/* Keep filtered inventory lists and empty messages hidden reliably, even when
+   .large-inventory-list sets display:grid. */
+#inventoryList[hidden],
+#inventoryListLarge[hidden],
+#noItemResults[hidden],
+#noItemResultsLarge[hidden] {
+  display: none !important;
+}
