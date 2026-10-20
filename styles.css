@@ -513,9 +513,8 @@ h1 span { color: var(--gold); }
   }
 
   .inventory-panel > .inventory-list {
-    flex: 1 1 0;
     min-height: 0;
-    max-height: none;
+    max-height: 510px; /* Constrains the 100+ items to a scrollable box on desktop */
     overflow-x: hidden;
     overflow-y: auto;
   }
@@ -781,19 +780,4 @@ h1 span { color: var(--gold); }
   .allocation-modal-stat span { font-size: 9px; letter-spacing: .06em; }
   .allocation-modal-actions { padding: 12px 14px 14px; }
   .allocation-modal-actions button { flex: 1; padding: 10px 8px; font-size: 12px; }
-}
-
-@media (min-width: 1081px) {
-  #panel-planner .workspace-grid > #inventoryPanel > #inventoryList {
-    /* Prevent the 103 child rows from contributing their full intrinsic height
-       to the auto-sized desktop grid, while allowing flex layout to size the
-       visible, scrollable list to the space available inside its panel. */
-    contain: size;
-    height: auto;
-    min-height: 0;
-    max-height: none;
-    flex: 1 1 0;
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
 }
