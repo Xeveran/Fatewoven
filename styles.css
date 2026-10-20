@@ -278,3 +278,101 @@ h1 span { color: var(--gold); }
 .priority-stepper button:disabled { opacity: .28; cursor: default; }
 
 .data-caveat { margin: 11px 0 0; color: #8390a0; font-size: 10px; line-height: 1.5; letter-spacing: .02em; }
+
+/* Readability improvements: keep display headings unchanged */
+.eyebrow,
+.section-kicker {
+  font-size: 11px;
+}
+
+.intro-text {
+  font-size: 16px;
+}
+
+.data-caveat,
+.stat-label,
+.stat small,
+.quiet-action,
+.count-pill,
+.text-action,
+.legend-row,
+.inventory-footer,
+.plan-footnote,
+.source-note,
+.source-links {
+  font-size: 12px;
+}
+
+.tab-button {
+  font-size: 14px;
+}
+
+.tab-button span {
+  font-size: 10px;
+}
+
+.panel-description {
+  font-size: 14px;
+}
+
+.search-field input {
+  font-size: 13px;
+}
+
+.roster-header-row,
+.inventory-subhead,
+.summary-chip span,
+.plan-table th,
+.preference-title {
+  font-size: 11px;
+}
+
+.character-flair,
+.item-sub,
+.guide-card .guide-subtitle,
+.empty-tier {
+  font-size: 11px;
+}
+
+.match-count,
+.item-name,
+.gift-name {
+  font-size: 14px;
+}
+
+.match-count b {
+  font-size: 14px;
+}
+
+.select-wrap select,
+.secondary-button,
+.primary-button,
+.plan-table td,
+.gift-tag,
+.empty-state p {
+  font-size: 13px;
+}
+
+.quantity-control input {
+  font-size: 13px;
+}
+
+.tier-badge {
+  font-size: 11px;
+}
+
+.note-cell {
+  font-size: 12px !important;
+}
+
+.empty-state.compact {
+  font-size: 13px;
+}
+
+.supplement-label {
+  font-size: 10px;
+}
+
+.toast {
+  font-size: 13px;
+}
