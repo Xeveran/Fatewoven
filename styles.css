@@ -555,3 +555,230 @@ h1 span { color: var(--gold); }
 .allocation-apply-button:disabled:hover {
   background: linear-gradient(180deg, #e7d19c, #c6a968);
 }
+
+/* Themed confirmation dialog for applying a gift allocation. */
+.allocation-modal {
+  width: min(610px, calc(100% - 28px));
+  max-width: 610px;
+  max-height: calc(100dvh - 28px);
+  margin: auto;
+  padding: 0;
+  overflow: hidden;
+  color: var(--text);
+  border: 1px solid #8c754b;
+  background: transparent;
+  box-shadow: 0 28px 100px rgba(0, 0, 0, .62), 0 0 0 1px rgba(217,187,123,.08);
+}
+.allocation-modal::backdrop {
+  background: rgba(3, 7, 13, .78);
+  backdrop-filter: blur(5px);
+}
+.allocation-modal-card {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100dvh - 28px);
+  background:
+    radial-gradient(ellipse at 0 0, rgba(143,48,62,.17), transparent 55%),
+    linear-gradient(145deg, #192331, #101721 78%);
+  border: 1px solid rgba(240,219,168,.13);
+}
+.allocation-modal-scroll {
+  min-height: 0;
+  padding: 18px clamp(18px, 4vw, 30px) 8px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.allocation-modal-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  height: 13px;
+  margin-bottom: 15px;
+  color: var(--gold);
+  font-size: 16px;
+  line-height: 1;
+}
+.allocation-modal-banner span {
+  width: 90px;
+  max-width: 27%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #8b7040);
+}
+.allocation-modal-banner span:last-child { transform: rotate(180deg); }
+.allocation-modal-banner i { font-style: normal; }
+.allocation-modal-header {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(217,187,123,.2);
+}
+.allocation-modal-emblem {
+  display: grid;
+  place-items: center;
+  flex: 0 0 43px;
+  width: 43px;
+  height: 43px;
+  color: var(--gold-bright);
+  font-size: 23px;
+  background: linear-gradient(145deg, rgba(143,48,62,.65), rgba(64,30,40,.65));
+  border: 1px solid #917647;
+  box-shadow: inset 0 0 0 3px rgba(217,187,123,.055);
+}
+.allocation-modal-titleblock { flex: 1 1 auto; min-width: 0; }
+.allocation-modal-titleblock .section-kicker { margin-bottom: 4px; font-size: 11px; }
+.allocation-modal-titleblock h2 {
+  margin: 0;
+  color: #f4e7cb;
+  font: 600 clamp(20px, 3vw, 27px)/1.2 Georgia, "Times New Roman", serif;
+}
+.allocation-modal-close {
+  display: grid;
+  place-items: center;
+  flex: 0 0 37px;
+  width: 37px;
+  height: 37px;
+  padding: 0 0 3px;
+  color: #b8c0cb;
+  border: 1px solid #414d5d;
+  background: rgba(7,12,18,.35);
+  font: 300 30px/1 Arial, sans-serif;
+}
+.allocation-modal-close:hover { color: var(--gold-bright); border-color: var(--gold-muted); background: rgba(217,187,123,.06); }
+.allocation-modal-description {
+  margin: 15px 0 14px;
+  color: #adb7c4;
+  font-size: 15px;
+  line-height: 1.6;
+}
+.allocation-modal-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0 0 20px;
+}
+.allocation-modal-stat {
+  min-width: 0;
+  padding: 11px 12px 10px;
+  border: 1px solid #354253;
+  background: rgba(7,12,18,.35);
+}
+.allocation-modal-stat strong {
+  display: block;
+  color: #f0e3c6;
+  font: 600 25px/1.05 Georgia, "Times New Roman", serif;
+  font-variant-numeric: tabular-nums;
+}
+.allocation-modal-stat span {
+  display: block;
+  margin-top: 5px;
+  color: #9ca9b9;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+.allocation-modal-stat.allocation-stat-loved { border-color: rgba(217,187,123,.38); }
+.allocation-modal-stat.allocation-stat-loved strong { color: var(--gold-bright); }
+.allocation-modal-stat.allocation-stat-liked { border-color: rgba(141,192,168,.32); }
+.allocation-modal-stat.allocation-stat-liked strong { color: #b2dec9; }
+.allocation-deduction-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 7px;
+  color: #d9c69c;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.allocation-item-type-count { color: #8b98a9; font-size: 11px; letter-spacing: .04em; font-weight: 600; }
+.allocation-deduction-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: min(30vh, 270px);
+  overflow-y: auto;
+  border: 1px solid #303d4c;
+  background: rgba(5,10,16,.34);
+  scrollbar-color: #536174 #111923;
+  scrollbar-width: thin;
+}
+.allocation-deduction-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  min-height: 40px;
+  padding: 7px 12px;
+  border-bottom: 1px solid rgba(59,72,89,.47);
+}
+.allocation-deduction-item:last-child { border-bottom: 0; }
+.allocation-deduction-item:nth-child(even) { background: rgba(255,255,255,.018); }
+.allocation-deduction-name { min-width: 0; color: #d5d9df; font-size: 14px; overflow-wrap: anywhere; }
+.allocation-deduction-quantity {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  min-width: 38px;
+  min-height: 27px;
+  padding: 2px 8px;
+  color: #f0dba8;
+  border: 1px solid rgba(217,187,123,.38);
+  background: rgba(217,187,123,.09);
+  font-size: 14px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.allocation-modal-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 14px 0 9px;
+  padding: 11px 12px;
+  border: 1px solid rgba(181,68,83,.35);
+  background: rgba(114,43,55,.14);
+}
+.allocation-warning-mark {
+  display: grid;
+  place-items: center;
+  flex: 0 0 19px;
+  width: 19px;
+  height: 19px;
+  color: #f0c7a8;
+  border: 1px solid rgba(217,151,123,.65);
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+}
+.allocation-modal-warning p { margin: 0; color: #c1b9b4; font-size: 12.5px; line-height: 1.55; }
+.allocation-modal-warning strong { color: #ead7c5; }
+.allocation-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  padding: 15px clamp(18px, 4vw, 30px) 19px;
+  border-top: 1px solid rgba(217,187,123,.17);
+  background: rgba(5,9,15,.25);
+}
+.allocation-modal-actions button { min-height: 43px; }
+.allocation-confirm-button { border-color: #e6cb87; }
+.allocation-confirm-button:disabled { opacity: .55; cursor: not-allowed; }
+@media (max-width: 480px) {
+  .allocation-modal { width: calc(100% - 18px); max-height: calc(100dvh - 18px); }
+  .allocation-modal-card { max-height: calc(100dvh - 18px); }
+  .allocation-modal-scroll { padding: 14px 14px 7px; }
+  .allocation-modal-emblem { flex-basis: 35px; width: 35px; height: 35px; }
+  .allocation-modal-header { gap: 9px; }
+  .allocation-modal-stats { gap: 5px; }
+  .allocation-modal-stat { padding: 9px 8px; }
+  .allocation-modal-stat strong { font-size: 22px; }
+  .allocation-modal-stat span { font-size: 9px; letter-spacing: .06em; }
+  .allocation-modal-actions { padding: 12px 14px 14px; }
+  .allocation-modal-actions button { flex: 1; padding: 10px 8px; font-size: 12px; }
+}
