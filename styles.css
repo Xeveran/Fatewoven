@@ -811,3 +811,89 @@ h1 span { color: var(--gold); }
   .allocation-modal-actions { padding: 12px 14px 14px; }
   .allocation-modal-actions button { flex: 1; padding: 10px 8px; font-size: 12px; }
 }
+
+/* Floating back-to-top control — Fatewoven dark navy / gold theme. */
+.back-to-top {
+  position: fixed;
+  right: clamp(16px, 2vw, 28px);
+  bottom: clamp(16px, 2vw, 28px);
+  z-index: 90; /* Keep toast notifications above the button. */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  width: 60px;
+  height: 60px;
+  padding: 5px 0 4px;
+  border: 1px solid rgba(217, 187, 123, .78);
+  border-radius: 50%;
+  color: var(--gold-bright);
+  background:
+    radial-gradient(circle at 35% 18%, rgba(217, 187, 123, .15), transparent 58%),
+    linear-gradient(145deg, rgba(28, 39, 53, .98), rgba(9, 14, 22, .98));
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .42), inset 0 1px rgba(255, 255, 255, .07);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(9px) scale(.96);
+  transition:
+    opacity .18s ease,
+    transform .18s ease,
+    visibility .18s ease,
+    border-color .18s ease,
+    box-shadow .18s ease;
+}
+
+.back-to-top.is-visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+.back-to-top:hover {
+  border-color: var(--gold-bright);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, .48), 0 0 0 3px rgba(217, 187, 123, .08);
+}
+
+.back-to-top:active {
+  transform: translateY(1px) scale(.97);
+}
+
+.back-to-top:focus-visible {
+  outline: 2px solid var(--gold-bright);
+  outline-offset: 4px;
+}
+
+.back-to-top-arrow {
+  display: block;
+  color: var(--gold-bright);
+  font: 400 28px/.85 Arial, sans-serif;
+  line-height: .85;
+}
+
+.back-to-top-label {
+  display: block;
+  color: #c6b181;
+  font: 800 8px/1 Inter, ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: .16em;
+  padding-left: .16em;
+}
+
+@media (max-width: 720px) {
+  .back-to-top {
+    right: 14px;
+    bottom: 14px;
+    width: 54px;
+    height: 54px;
+  }
+
+  .back-to-top-arrow { font-size: 25px; }
+  .back-to-top-label { font-size: 7.5px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .back-to-top { transition: none; }
+}
