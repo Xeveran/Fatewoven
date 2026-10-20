@@ -107,7 +107,7 @@ h1 span { color: var(--gold); }
 .action-divider { color: #677384; font-size: 15px; }
 .roster-header-row, .inventory-subhead { display: grid; grid-template-columns: minmax(0,1fr) 85px; align-items: center; padding: 9px 8px; color: #738092; font-size: 13.5px; letter-spacing: .1em; text-transform: uppercase; border-top: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft); }
 .roster-header-row span:nth-child(2) { text-align: right; }
-.roster-list { list-style: none; margin: 0; padding: 0; max-height: 560px; overflow: auto; scrollbar-color: #435063 #111821; scrollbar-width: thin; }
+.roster-list { position: relative; list-style: none; margin: 0; padding: 0; max-height: 560px; overflow: auto; scrollbar-color: #435063 #111821; scrollbar-width: thin; }
 .roster-item { display: grid; grid-template-columns: 25px minmax(0,1fr) 66px 25px; gap: 9px; align-items: center; min-height: 52px; padding: 6px 6px; border-bottom: 1px solid rgba(59,72,89,.48); background: rgba(255,255,255,.003); transition: background .12s ease, opacity .12s ease; }
 .roster-item:last-child { border-bottom: 0; }
 .roster-item:hover { background: rgba(217,187,123,.035); }
@@ -291,6 +291,7 @@ h1 span { color: var(--gold); }
   .inventory-toolbar .search-field { flex-basis: 100%; }
   .select-wrap { width: 100%; }
   .inventory-list { max-height: 440px; }
+  .large-inventory-list { max-height: none; }
   .plan-actions { flex-wrap: wrap; width: 100%; }
   .plan-actions button { flex: 1; }
   .plan-summary { grid-template-columns: repeat(2, minmax(0,1fr)); }
