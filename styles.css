@@ -810,3 +810,12 @@ h1 span { color: var(--gold); }
   .allocation-modal-actions { padding: 12px 14px 14px; }
   .allocation-modal-actions button { flex: 1; padding: 10px 8px; font-size: 12px; }
 }
+
+/* Live test to see if this resolves the height issue for the Gift Plan tab due to the long gift inventory div */
+#inventoryList {
+    height: auto;               /* Remove rigid height stretching */
+    max-height: 400px;          /* Optional: set an appropriate max height */
+    overflow-y: auto;           /* Enable internal scrolling if content overflows */
+    position: relative;         /* Ensure it stays within normal document flow */
+    box-sizing: border-box;     /* Prevent padding/margins from causing overflow */
+}
