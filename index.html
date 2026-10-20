@@ -181,6 +181,33 @@
     </main>
     <footer class="site-footer"><span>Fan-made tool · Not affiliated with Nintendo or Intelligent Systems</span><span>Settings and inventory stay in this browser unless you export a backup.</span></footer>
   </div>
+  <dialog id="allocationModal" class="allocation-modal" aria-labelledby="allocationModalTitle" aria-describedby="allocationModalDescription">
+    <div class="allocation-modal-card">
+      <div class="allocation-modal-scroll">
+        <div class="allocation-modal-banner" aria-hidden="true"><span></span><i>✦</i><span></span></div>
+        <header class="allocation-modal-header">
+          <div class="allocation-modal-emblem" aria-hidden="true">✦</div>
+          <div class="allocation-modal-titleblock">
+            <p class="section-kicker">Confirm weekly allocation</p>
+            <h2 id="allocationModalTitle">Deduct gifts from inventory?</h2>
+          </div>
+          <button type="button" class="allocation-modal-close" id="closeAllocationModal" aria-label="Close confirmation">×</button>
+        </header>
+        <p class="allocation-modal-description" id="allocationModalDescription">Review the planned deductions before updating your saved inventory. Nothing changes until you confirm.</p>
+        <div class="allocation-modal-stats" id="allocationModalStats" aria-label="Allocation summary"></div>
+        <div class="allocation-deduction-heading">
+          <span>Items to deduct</span>
+          <span id="allocationItemTypeCount" class="allocation-item-type-count">0 item types</span>
+        </div>
+        <ul id="allocationDeductionList" class="allocation-deduction-list" aria-label="Items and quantities to deduct"></ul>
+        <div class="allocation-modal-warning"><span class="allocation-warning-mark" aria-hidden="true">!</span><p>This applies <strong>every assigned row</strong>, even when unassigned rows are hidden. Your inventory counts will be saved in this browser.</p></div>
+      </div>
+      <div class="allocation-modal-actions">
+        <button type="button" class="secondary-button" id="cancelAllocationModal">Cancel</button>
+        <button type="button" class="primary-button allocation-confirm-button" id="confirmAllocationModal"><span aria-hidden="true">✓</span> Confirm &amp; deduct</button>
+      </div>
+    </div>
+  </dialog>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script src="data.js"></script>
   <script src="app.js"></script>
