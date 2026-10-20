@@ -74,6 +74,19 @@
               <span id="rosterCount" class="count-pill">0 characters</span>
             </div>
             <p class="panel-description">Drag the grip to reorder characters. The first character is the highest priority. Disable anyone you do not plan to gift this week.</p>
+            <div class="route-preset-panel">
+              <div class="route-preset-heading">
+                <strong>Route priority presets</strong>
+                <span>Lowest Renown first</span>
+              </div>
+              <div class="route-preset-buttons" role="group" aria-label="Sort characters by route Renown requirement">
+                <button type="button" class="route-preset" data-route-preset="cai" aria-pressed="false">Cai</button>
+                <button type="button" class="route-preset" data-route-preset="dietrich" aria-pressed="false">Dietrich</button>
+                <button type="button" class="route-preset" data-route-preset="theodora" aria-pressed="false">Theodora</button>
+                <button type="button" class="route-preset" data-route-preset="leda" aria-pressed="false">Leda</button>
+              </div>
+              <p class="route-preset-note">Automatic recruits sort first. Characters without a Renown requirement listed for that route are placed at the bottom. Applying a preset does not change selections or inventory.</p>
+            </div>
             <div class="roster-tools">
               <label class="search-field"><span class="sr-only">Search characters</span><span class="search-icon">⌕</span><input id="characterSearch" type="search" placeholder="Find a character…" autocomplete="off"></label>
               <div class="inline-actions">
@@ -154,7 +167,7 @@
           <label class="search-field guide-search"><span class="sr-only">Search the gift reference</span><span class="search-icon">⌕</span><input id="guideSearch" type="search" placeholder="Search character or gift…" autocomplete="off"></label>
           <div id="guideList" class="guide-grid"></div>
           <p class="source-note"><strong>Data note:</strong> the Game8 page did not permit direct retrieval during app creation. This offline snapshot combines the public Game8-derived gift export with a small number of clearly marked supplemental reports. The current bundle includes 48 character preference records and 100 named inventory items; it is not yet a verified full 104-item catalogue. Preferences can change as guides are corrected; check the source guide before treating uncertain entries as definitive.</p>
-          <p class="source-links"><a href="https://game8.co/games/Fire-Emblem-Fortunes-Weave/archives/623690" target="_blank" rel="noopener noreferrer">Open Game8 gift guide ↗</a><a href="https://fire-emblem-fortunes-weave.turam.dev/" target="_blank" rel="noopener noreferrer">Game8-derived character index ↗</a><a href="https://raiderking.com/fire-emblem-fortunes-weave-all-loved-gifts-guide/" target="_blank" rel="noopener noreferrer">Supplemental gift guide ↗</a></p>
+          <p class="source-links"><a href="https://game8.co/games/Fire-Emblem-Fortunes-Weave/archives/623690" target="_blank" rel="noopener noreferrer">Open Game8 gift guide ↗</a><a href="https://fire-emblem-fortunes-weave.turam.dev/" target="_blank" rel="noopener noreferrer">Game8-derived character index ↗</a><a href="https://raiderking.com/fire-emblem-fortunes-weave-all-loved-gifts-guide/" target="_blank" rel="noopener noreferrer">Supplemental gift guide ↗</a><a href="https://lum.gg/fire-emblem-fortunes-weave/recruitment" target="_blank" rel="noopener noreferrer">Route Renown requirements ↗</a></p>
         </div>
       </section>
 

@@ -11,6 +11,54 @@ window.GIFT_DATA = {
   // trackable inventory items even though this snapshot has no reliable tier
   // mapping for them, so the optimizer will not recommend them without a match.
   catalogExtras: ["Ahm Lu Cloth", "Decorative Arrows", "Imitation Medal", "Pegasus Panorama", "Red Hair Clip"],
+  // Recruitment Renown requirements used by the route priority presets.
+  // 0 = joins automatically on that route; a missing key means no requirement
+  // is listed for that route in the referenced recruitment guide.
+  routeRenown: {
+    cai: {
+      "Cai": 0, "Peter": 0, "Catania": 10, "Diego": 10, "Io": 10,
+      "Loretta": 7, "Ninae": 6, "Noctula": 4, "Nydine": 6, "Peppe": 9,
+      "Seteth": 6, "Sofia": 9, "Yang Jie": 3, "Fianna": 8, "Goliath": 7,
+      "Jester": 10, "Lilian": 8, "Ludia": 9, "Lysander": 8, "Mu": 9,
+      "Olympia": 8, "Sirocco": 9, "Ursula": 10, "Dadao": 7, "Dante": 10,
+      "Esmeralda": 7, "Halvin": 5, "Majide": 5, "Mikaela": 5, "Nezha": 6,
+      "Simon": 8, "Zarcone": 8, "Benditz": 9, "Jasmine": 8, "Kiroc": 8,
+      "Alexandra": 7, "Nuzzuo": 6, "Inyoni": 8, "Guzran": 2
+    },
+    dietrich: {
+      "Dietrich": 0, "Fabio": 0, "Esmeralda": 0, "Mikaela": 0,
+      "Buccar": 8, "Catania": 8, "Dadao": 10, "Dante": 8, "Diego": 9,
+      "Fianna": 7, "Goliath": 6, "Guzran": 8, "Halvin": 9, "Io": 3,
+      "Jester": 6, "Lilian": 8, "Loretta": 9, "Ludia": 9, "Lysander": 6,
+      "Majide": 8, "Nezha": 10, "Ninae": 8, "Noctula": 6, "Nydine": 5,
+      "Peppe": 8, "Peter": 9, "Sha Lan": 10, "Simon": 7, "Sofia": 9,
+      "Tialla": 9, "Ultand": 5, "Ursula": 7, "Zarcone": 7, "Benditz": 7,
+      "Mu": 7, "Olympia": 6, "Sirocco": 9, "Jasmine": 9, "Kiroc": 4,
+      "Alexandra": 8, "Inyoni": 8, "Nuzzuo": 9, "Gaitz": 10, "Yang Jie": 2
+    },
+    theodora: {
+      "Bonaventure": 0, "Theodora": 0, "Tobias": 0, "Lilian": 0, "Lysander": 0,
+      "Buccar": 8, "Catania": 7, "Dadao": 5, "Dante": 6, "Diego": 8,
+      "Esmeralda": 9, "Fianna": 9, "Goliath": 9, "Guzran": 8, "Halvin": 7,
+      "Io": 10, "Jester": 9, "Loretta": 5, "Ludia": 7, "Majide": 8,
+      "Mikaela": 8, "Mu": 9, "Nezha": 6, "Ninae": 6, "Noctula": 3,
+      "Nydine": 5, "Olympia": 9, "Peppe": 7, "Peter": 7, "Seteth": 6,
+      "Simon": 7, "Sirocco": 5, "Tialla": 10, "Ultand": 6, "Ursula": 9,
+      "Yang Jie": 9, "Zarcone": 4, "Benditz": 8, "Jasmine": 8, "Kiroc": 10,
+      "Alexandra": 6, "Inyoni": 9, "Nuzzuo": 6, "Sofia": 2
+    },
+    leda: {
+      "Buccar": 0, "Leda": 0, "Mu": 0, "Sirocco": 0, "Olympia": 0,
+      "Dadao": 5, "Dante": 10, "Diego": 8, "Esmeralda": 6, "Fabio": 9,
+      "Goliath": 10, "Guzran": 3, "Halvin": 7, "Io": 6, "Jester": 10,
+      "Lilian": 7, "Loretta": 5, "Ludia": 7, "Lysander": 7, "Majide": 9,
+      "Mikaela": 6, "Nezha": 9, "Ninae": 8, "Noctula": 8, "Nydine": 10,
+      "Peter": 10, "Seteth": 10, "Sha Lan": 8, "Simon": 6, "Sofia": 7,
+      "Tialla": 8, "Ultand": 8, "Yang Jie": 8, "Zarcone": 5, "Benditz": 7,
+      "Fianna": 5, "Kiroc": 4, "Jasmine": 4, "Alexandra": 10,
+      "Nuzzuo": 9, "Inyoni": 7, "Catania": 2
+    }
+  },
   characters: [
     { name: "Alexandra", loved: ["Eastern Earrings", "Strategy Manuscript", "Tales of Adventure"], reallyLiked: ["Alecto Garum", "Dagda Beard Grass", "Garum", "Gaudy Bangle", "Herbal Recipe Guide", "Home-Recipe Book", "Horse-Grooming Kit", "Kitten Figurine", "Mane Ornament", "Pastry Cookbook", "Smooth Garum", "Strong Seasonings", "Sturdy Rucksack", "Training Bracelet", "Village Recipes", "Wing Fletching"] },
     { name: "Benditz", loved: ["Eastern Black Silk", "Eastern Earrings", "Eastern Tea Leaves", "Strategy Manuscript", "Tales of Adventure"], reallyLiked: ["Coffee Pastries", "Common Coffee", "Eastern Love Story", "Gaudy Bangle", "Orgus Coffee", "Select Coffee", "Southern Coffee", "Wing Fletching"] },

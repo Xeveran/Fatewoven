@@ -16,6 +16,8 @@
   }));
   const characterByName = new Map(characters.map((c) => [c.name, c]));
   const characterNames = characters.map((c) => c.name);
+  const routeLabels = { cai: 'Cai', dietrich: 'Dietrich', theodora: 'Theodora', leda: 'Leda' };
+  const routeRenown = DATA.routeRenown || {};
   const allReferenceCharacters = [
     ...characters,
     ...(DATA.charactersWithoutPreferences || []).map((name) => ({ name, loved: [], reallyLiked: [], source: 'No preference data in snapshot' }))
@@ -36,7 +38,8 @@
   const initialState = {
     order: initialOrder,
     active: [...characterNames],
-    inventory: Object.fromEntries(itemNames.map((name) => [name, 0]))
+    inventory: Object.fromEntries(itemNames.map((name) => [name, 0])),
+    routePreset: ''
   };
   let state = loadState();
   let currentPlan = [];
@@ -59,7 +62,8 @@
           inventory[name] = Number.isFinite(value) ? Math.max(0, Math.min(999, Math.floor(value))) : 0;
         });
       }
-      return { order, active: [...new Set(validActive)], inventory };
+      const routePreset = Object.prototype.hasOwnProperty.call(routeLabels, parsed.routePreset) ? parsed.routePreset : '';
+      return { order, active: [...new Set(validActive)], inventory, routePreset };
     } catch (error) {
       console.warn('Could not load saved gift planner state:', error);
       return structuredCloneSafe(initialState);
@@ -219,14 +223,23 @@
       const enabled = state.active.includes(name);
       const originalPriority = state.order.indexOf(name) + 1;
       const summary = `${person.loved.length} Loved · ${person.reallyLiked.length} Really liked`;
+      const routeRequirement = state.routePreset ? (routeRenown[state.routePreset] || {})[name] : undefined;
+      const routeInfo = !state.routePreset ? '' : Number.isFinite(routeRequirement)
+        ? `<span class="route-renown">${routeRequirement === 0 ? '· Auto recruit' : `· Renown ${routeRequirement}`}</span>`
+        : '<span class="route-renown route-unlisted">· Not listed</span>';
       return `<li class="roster-item${enabled ? '' : ' roster-disabled'}" draggable="true" data-character="${escapeHTML(name)}">
         <button class="drag-grip" type="button" aria-label="Drag to reorder ${escapeHTML(name)}" title="Drag to reorder">⠿</button>
-        <div class="roster-person"><span class="priority-number">${String(originalPriority).padStart(2, '0')} <span class="character-name">${escapeHTML(name)}</span></span><span class="character-flair">${escapeHTML(summary)} <span class="priority-stepper"><button type="button" data-move-character="${escapeHTML(name)}" data-move-direction="-1" aria-label="Move ${escapeHTML(name)} up" title="Move up" ${originalPriority === 1 ? 'disabled' : ''}>↑</button><button type="button" data-move-character="${escapeHTML(name)}" data-move-direction="1" aria-label="Move ${escapeHTML(name)} down" title="Move down" ${originalPriority === state.order.length ? 'disabled' : ''}>↓</button></span></span></div>
+        <div class="roster-person"><span class="priority-number">${String(originalPriority).padStart(2, '0')} <span class="character-name">${escapeHTML(name)}</span></span><span class="character-flair">${escapeHTML(summary)} ${routeInfo}<span class="priority-stepper"><button type="button" data-move-character="${escapeHTML(name)}" data-move-direction="-1" aria-label="Move ${escapeHTML(name)} up" title="Move up" ${originalPriority === 1 ? 'disabled' : ''}>↑</button><button type="button" data-move-character="${escapeHTML(name)}" data-move-direction="1" aria-label="Move ${escapeHTML(name)} down" title="Move down" ${originalPriority === state.order.length ? 'disabled' : ''}>↓</button></span></span></div>
         <div class="match-count"><b>${matchCount}</b><br>available</div>
         <label class="toggle-cell"><span class="sr-only">Include ${escapeHTML(name)} in plan</span><input type="checkbox" data-toggle-character="${escapeHTML(name)}" ${enabled ? 'checked' : ''}></label>
       </li>`;
     }).join('');
     document.getElementById('noCharacterResults').hidden = ordered.length !== 0;
+    document.querySelectorAll('[data-route-preset]').forEach((button) => {
+      const activePreset = button.dataset.routePreset === state.routePreset;
+      button.classList.toggle('is-active', activePreset);
+      button.setAttribute('aria-pressed', String(activePreset));
+    });
   }
 
   function inventoryRowHTML(item) {
@@ -344,6 +357,7 @@
     const neighborIndex = currentIndex + direction;
     if (currentIndex < 0 || neighborIndex < 0 || neighborIndex >= state.order.length) return;
     [state.order[currentIndex], state.order[neighborIndex]] = [state.order[neighborIndex], state.order[currentIndex]];
+    state.routePreset = '';
     saveState();
     renderAll();
   }
@@ -372,6 +386,16 @@
       const moveButton = event.target.closest('[data-move-character]');
       if (moveButton) moveCharacter(moveButton.dataset.moveCharacter, Number(moveButton.dataset.moveDirection));
     });
+    document.querySelectorAll('[data-route-preset]').forEach((button) => button.addEventListener('click', () => {
+      const route = button.dataset.routePreset;
+      const requirements = routeRenown[route] || {};
+      const requirementFor = (name) => Number.isFinite(requirements[name]) ? requirements[name] : Number.POSITIVE_INFINITY;
+      state.order.sort((a, b) => requirementFor(a) - requirementFor(b) || a.localeCompare(b));
+      state.routePreset = route;
+      saveState();
+      renderAll();
+      toast(`${routeLabels[route]} route preset applied: lowest Renown first.`);
+    }));
     const list = document.getElementById('rosterList');
     list.addEventListener('dragstart', (event) => {
       const row = event.target.closest('.roster-item');
@@ -403,6 +427,7 @@
       const targetIndex = state.order.indexOf(targetName);
       const insertAt = targetIndex + (dropAfter ? 1 : 0);
       state.order.splice(insertAt, 0, draggingName);
+      state.routePreset = '';
       draggingName = null;
       saveState();
       renderAll();
@@ -418,7 +443,7 @@
       state.active = []; saveState(); renderAll(); toast('No characters are currently selected.');
     });
     document.getElementById('resetOrder').addEventListener('click', () => {
-      state.order = [...initialOrder]; saveState(); renderAll(); toast('Character order reset to A–Z.');
+      state.order = [...initialOrder]; state.routePreset = ''; saveState(); renderAll(); toast('Character order reset to A–Z.');
     });
   }
 
@@ -491,7 +516,7 @@
       toast('CSV gift plan exported.');
     });
     document.getElementById('exportBackup').addEventListener('click', () => {
-      const backup = { app: 'Fatewoven Gift Strategist', version: 1, savedAt: new Date().toISOString(), order: state.order, active: state.active, inventory: state.inventory };
+      const backup = { app: 'Fatewoven Gift Strategist', version: 1, savedAt: new Date().toISOString(), order: state.order, active: state.active, inventory: state.inventory, routePreset: state.routePreset };
       downloadFile('fatewoven-gift-backup.json', JSON.stringify(backup, null, 2), 'application/json');
       toast('Backup file exported.');
     });
@@ -515,7 +540,8 @@
           state = {
             order: [...incomingOrder, ...initialOrder.filter((name) => !incomingOrder.includes(name))],
             active,
-            inventory
+            inventory,
+            routePreset: Object.prototype.hasOwnProperty.call(routeLabels, backup.routePreset) ? backup.routePreset : ''
           };
           saveState(); renderAll(); toast('Backup imported.');
         } catch (error) {
