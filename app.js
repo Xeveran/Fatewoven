@@ -518,9 +518,72 @@
       renderPlan();
     });
 
+    const modal = document.getElementById('allocationModal');
+    const modalStats = document.getElementById('allocationModalStats');
+    const deductionList = document.getElementById('allocationDeductionList');
+    const itemTypeCount = document.getElementById('allocationItemTypeCount');
+    const confirmButton = document.getElementById('confirmAllocationModal');
+    let pendingAllocation = null;
+
+    function closeAllocationModal() {
+      pendingAllocation = null;
+      if (modal.open) modal.close('cancel');
+    }
+
+    function appendModalStat(label, value, modifier) {
+      const chip = document.createElement('div');
+      chip.className = `allocation-modal-stat${modifier ? ` ${modifier}` : ''}`;
+      const number = document.createElement('strong');
+      number.textContent = String(value);
+      const caption = document.createElement('span');
+      caption.textContent = label;
+      chip.append(number, caption);
+      modalStats.appendChild(chip);
+    }
+
+    function showAllocationModal(assigned, deductions, lovedCount, reallyLikedCount) {
+      pendingAllocation = {
+        assignedCount: assigned.length,
+        deductions: { ...deductions },
+        lovedCount,
+        reallyLikedCount
+      };
+      modalStats.replaceChildren();
+      appendModalStat('Gifts to deduct', assigned.length, 'allocation-stat-total');
+      appendModalStat('Loved', lovedCount, 'allocation-stat-loved');
+      appendModalStat('Really liked', reallyLikedCount, 'allocation-stat-liked');
+
+      const entries = Object.entries(deductions).sort(([a], [b]) => a.localeCompare(b));
+      itemTypeCount.textContent = `${entries.length} ${entries.length === 1 ? 'item type' : 'item types'}`;
+      deductionList.replaceChildren();
+      entries.forEach(([item, quantity]) => {
+        const row = document.createElement('li');
+        row.className = 'allocation-deduction-item';
+        const name = document.createElement('span');
+        name.className = 'allocation-deduction-name';
+        name.textContent = item;
+        const amount = document.createElement('span');
+        amount.className = 'allocation-deduction-quantity';
+        amount.textContent = `−${quantity}`;
+        amount.setAttribute('aria-label', `Deduct ${quantity}`);
+        row.append(name, amount);
+        deductionList.appendChild(row);
+      });
+
+      confirmButton.disabled = false;
+      if (typeof modal.showModal === 'function') {
+        modal.showModal();
+        document.getElementById('cancelAllocationModal').focus();
+      } else {
+        // A small compatibility fallback for browsers without HTMLDialogElement.showModal.
+        toast('Your browser does not support the inventory confirmation dialog. Please update it and try again.');
+        pendingAllocation = null;
+      }
+    }
+
     document.getElementById('applyAllocation').addEventListener('click', () => {
-      // Rebuild at click time so the confirmation and deductions reflect the
-      // latest inventory and character order, regardless of the visible filter.
+      // Build at click time so the modal always reflects the current order and stock,
+      // independently of the display-only Hide unassigned filter.
       const { allocations } = buildPlan();
       const assigned = allocations.filter((row) => row.gift);
       if (!assigned.length) {
@@ -534,7 +597,7 @@
         deductions[row.gift] = (deductions[row.gift] || 0) + 1;
       });
 
-      // Defensive check: don't mutate inventory if an allocation somehow exceeds stock.
+      // Never show a confirmation if the plan exceeds the current stock.
       const invalid = Object.entries(deductions).find(([item, quantity]) => (state.inventory[item] || 0) < quantity);
       if (invalid) {
         toast(`Inventory changed for ${invalid[0]}. Rebuild the plan before applying it.`);
@@ -544,30 +607,59 @@
 
       const lovedCount = assigned.filter((row) => row.tier === 'Loved').length;
       const reallyLikedCount = assigned.filter((row) => row.tier === 'Really liked').length;
-      const itemLines = Object.entries(deductions)
-        .sort(([a], [b]) => a.localeCompare(b))
-        .map(([item, quantity]) => `• ${item} × ${quantity}`)
-        .join('\n');
-      const message = [
-        `Deduct ${assigned.length} allocated ${assigned.length === 1 ? 'gift' : 'gifts'} from your inventory?`,
-        '',
-        `${lovedCount} Loved · ${reallyLikedCount} Really liked`,
-        'This applies every assigned row in the plan, even if “Hide unassigned” is enabled, and saves the new inventory counts in this browser.',
-        '',
-        'Items to deduct:',
-        itemLines,
-        '',
-        'Continue?'
-      ].join('\n');
+												  
+											   
+																
+					
+					   
+																											   
+		   
+      showAllocationModal(assigned, deductions, lovedCount, reallyLikedCount);
+    });
+		   
+						   
+				  
+		   
+				   
+				   
 
-      if (!window.confirm(message)) return;
+    document.getElementById('cancelAllocationModal').addEventListener('click', closeAllocationModal);
+    document.getElementById('closeAllocationModal').addEventListener('click', closeAllocationModal);
+    modal.addEventListener('click', (event) => {
+      // A click on the dialog backdrop (outside its card) dismisses without changes.
+      if (event.target === modal) closeAllocationModal();
+    });
+    modal.addEventListener('cancel', () => {
+      // Escape dismisses the custom modal without applying anything.
+      pendingAllocation = null;
+    });
+    modal.addEventListener('close', () => {
+      pendingAllocation = null;
+    });
 
-      Object.entries(deductions).forEach(([item, quantity]) => {
+    confirmButton.addEventListener('click', () => {
+      if (!pendingAllocation) return;
+      const pending = pendingAllocation;
+
+      // Validate one final time immediately before changing inventory.
+      const invalid = Object.entries(pending.deductions)
+        .find(([item, quantity]) => (state.inventory[item] || 0) < quantity);
+      if (invalid) {
+        closeAllocationModal();
+        toast(`Inventory changed for ${invalid[0]}. Rebuild the plan before applying it.`);
+        renderAll();
+        return;
+      }
+
+      Object.entries(pending.deductions).forEach(([item, quantity]) => {
         state.inventory[item] = Math.max(0, (state.inventory[item] || 0) - quantity);
       });
+      const deductedCount = pending.assignedCount;
+      pendingAllocation = null;
+      if (modal.open) modal.close('applied');
       saveState();
       renderAll();
-      toast(`Inventory updated: ${assigned.length} ${assigned.length === 1 ? 'gift deducted' : 'gifts deducted'}.`);
+      toast(`Inventory updated: ${deductedCount} ${deductedCount === 1 ? 'gift deducted' : 'gifts deducted'}.`);
     });
   }
 
