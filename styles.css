@@ -526,18 +526,19 @@ h1 span { color: var(--gold); }
   }
 }
 
-/* Sticky-footer layout: keep the footer at the bottom of the viewport when the
-   active tab has less content than the available screen height. Longer tabs
-   continue to grow naturally and scroll as usual. */
+/* Content-driven page height.
+   Keep the page wrapper in normal document flow so switching tabs recalculates
+   the page height from the active panel only. This avoids a flex/min-height
+   wrapper leaving scrollable empty space after the footer. */
 .site-shell {
-  min-height: 100vh;
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
+  min-height: 0;
+  display: block;
 }
 .site-shell > main {
-  flex: 1 0 auto;
+  flex: none;
+  min-height: 0;
 }
 .site-footer {
-  margin-top: auto;
+  margin-top: 0;
+  margin-bottom: 0;
 }
