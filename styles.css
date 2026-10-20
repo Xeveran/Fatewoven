@@ -782,3 +782,12 @@ h1 span { color: var(--gold); }
   .allocation-modal-actions { padding: 12px 14px 14px; }
   .allocation-modal-actions button { flex: 1; padding: 10px 8px; font-size: 12px; }
 }
+
+/* Height fix when Gift Plan tab is selected */
+@media (min-width: 1081px) {
+  /* The planner's single-column inventory should scroll inside its panel,
+     not expand to the full height of every inventory row. */
+  .inventory-panel > .inventory-list {
+    max-height: min(560px, 55vh);
+  }
+}
